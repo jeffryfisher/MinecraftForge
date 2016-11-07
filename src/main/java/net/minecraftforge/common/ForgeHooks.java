@@ -20,7 +20,7 @@
 package net.minecraftforge.common;
 
 import java.net.URI;
-import java.net.URISyntaxException;
+onAnvilChangeimport java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashSet;
@@ -843,9 +843,9 @@ public class ForgeHooks
         return ret;
     }
 
-    public static boolean onAnvilChange(ContainerRepair container, ItemStack left, ItemStack right, IInventory outputSlot, String name, int baseCost)
+    public static boolean onAnvilChange(ContainerRepair container, ItemStack left, ItemStack right, EntityPlayer player, IInventory outputSlot, String name, int baseCost)
     {
-        AnvilUpdateEvent e = new AnvilUpdateEvent(left, right, name, baseCost);
+        AnvilUpdateEvent e = new AnvilUpdateEvent(left, right, name, player, baseCost);
         if (MinecraftForge.EVENT_BUS.post(e)) return false;
         if (e.getOutput() == null) return true;
 
