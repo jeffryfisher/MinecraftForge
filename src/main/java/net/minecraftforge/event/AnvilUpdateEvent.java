@@ -21,6 +21,7 @@ package net.minecraftforge.event;
 
 import net.minecraftforge.fml.common.eventhandler.Cancelable;
 import net.minecraftforge.fml.common.eventhandler.Event;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -33,25 +34,37 @@ import net.minecraft.item.ItemStack;
 @Cancelable
 public class AnvilUpdateEvent extends Event
 {
-    private final ItemStack left;  // The left side of the input
-    private final ItemStack right; // The right side of the input
-    private final String name;     // The name to set the item, if the user specified one.
-    private ItemStack output;      // Set this to set the output stack
-    private int cost;              // The base cost, set this to change it if output != null
-    private int materialCost; // The number of items from the right slot to be consumed during the repair. Leave as 0 to consume the entire stack.
+    private final ItemStack left;      // The left side of the input
+    private final ItemStack right;     // The right side of the input
+    private final String name;         // The name to set the item, if the user specified one.
+    private final EntityPlayer player; // The player who is updating the anvil.
+    private ItemStack output;          // Set this to set the output stack
+    private int cost;                  // The base cost, set this to change it if output != null
+    private int materialCost; // Number of items from the right slot to be consumed by repair. Leave as 0 to consume the entire stack.
 
-    public AnvilUpdateEvent(ItemStack left, ItemStack right, String name, int cost)
+    public AnvilUpdateEvent(ItemStack left, ItemStack right, String name, int cost, EntityPlayer player)
     {
         this.left = left;
         this.right = right;
         this.name = name;
         this.setCost(cost);
+        this.player = player;
         this.setMaterialCost(0);
+    }
+
+    /**
+     * Callers may update their code to acquire and pass the anvil-changing player to the other constructor
+     */
+    @Deprecated
+    public AnvilUpdateEvent(ItemStack left, ItemStack right, String name, int cost)
+    {
+        this (left, right, name, cost, null);
     }
 
     public ItemStack getLeft() { return left; }
     public ItemStack getRight() { return right; }
     public String getName() { return name; }
+    public EntityPlayer getPlayer() { return player; }
     public ItemStack getOutput() { return output; }
     public void setOutput(ItemStack output) { this.output = output; }
     public int getCost() { return cost; }
